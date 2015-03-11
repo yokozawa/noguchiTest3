@@ -1,32 +1,34 @@
 require './juice.rb'
-require './sales.rb'
 class VendingMachine
+
 
   def initialize
     @sum = 0
     @stocks = {"cola"=> [], "redbull" => []}
-    @ng_money = [1, 5, 2000, 5000, 10000]
+    @available_money = [10, 50, 100, 500, 1000, 5000]
+    @paypack = 0
+    @sales_amaunt = 0
   end
 
   def throwing(money)
-    if @ng_money.include?(money)
-      puts "#{money}円は扱えない貨幣です"
-    else
+    if @available_money.include?(money)
       @sum += money
       puts "現在#{@sum}円投入されています"
+    else
+      puts "#{money}円は扱えない貨幣です"
+      @payback = money
     end
   end
 
-  def payback(sales)
-    @sum -= sales
-    puts "#{@sum}円が払い戻されます"
+  def payback
+    puts "#{@payback}円が払い戻されます"
   end
 
-  def stock_check(juice_name)
+  def stock_check?(juice_name)
     @stocks[juice_name].count > 0 ? true : false
   end
 
-  def money_check(juice_name)
+  def money_check?(juice_name)
     @sum >= @stocks[juice_name][0].price ? true : false
   end
 
@@ -40,14 +42,23 @@ class VendingMachine
     puts "在庫は#{@stocks[juice_name].count}つあります"
   end
 
+  def show_sales_amaount
+    puts "売上は#{@sales_amaunt}円です"
+  end
+
+  def seles_management
+    sales = @stocks[juice_name][0].price
+    @sales_amaunt += sales
+    @sum -= sales
+    @payback = @sum
+  end
+
   def buying(juice_name)
-    if stock_check(juice_name) && money_check(juice_name)
+    if stock_check?(juice_name) && money_check?(juice_name)
       @stocks[juice_name].pop
-      sales = @stocks[juice_name][0].price
-      Sales.new(sales).getsum(sales)
       puts "#{juice_name}を#{sales}円で購入しました！"
-      a = payback(sales)
-    elsif money_check(juice_name)
+      seles_management
+    elsif !stock_check?(juice_name)
       puts "品切れです"
     else
       puts "投入金額が不足しています"
@@ -56,10 +67,12 @@ class VendingMachine
 end
 
 vending_machine = VendingMachine.new
-vending_machine.stock_making("cola",5)
-vending_machine.show_stock("cola")
-vending_machine.stock_making("cola",3)
-vending_machine.show_stock("cola")
-vending_machine.throwing(120)
-vending_machine.buying("cola")
-vending_machine.show_stock("cola")
+vending_machine.stock_making("redbull",5)
+vending_machine.show_stock("redbull")
+vending_machine.throwing(200)
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.payback
+vending_machine.show_stock("redbull")
+vending_machine.show_sales_amaount
