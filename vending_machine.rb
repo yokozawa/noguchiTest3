@@ -84,3 +84,11 @@ vending_machine.buying("redbull")
 vending_machine.payback
 vending_machine.show_stock("cola")
 vending_machine.show_sales_amaount
+
+vending_machine.throwing(1000)
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
+vending_machine.buying("redbull")
